@@ -1,0 +1,90 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# GitHub Pages deployment workflow
+#
+# Triggered on every push to `main` (and manually via workflow_dispatch).
+# Produces a fully static Next.js bundle and deploys it to GitHub Pages using
+# the official actions/deploy-pages action.
+#
+# Key env vars injected at build-time:
+#   NEXT_STATIC_EXPORT=true       → enables `output: "export"` in next.config.ts
+#   NEXT_PUBLIC_BASE_PATH         → sets the sub-directory path for GitHub Pages
+#   NEXT_PUBLIC_STATIC_MODE=true  → tells the dialog to skip the API route and
+#                                   show direct contact details instead
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:       # allow manual re-runs from the Actions tab
+
+# Required permissions for the GitHub Pages deployment actions.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only allow one concurrent deployment; cancel any in-progress run when a new
+# push arrives so GitHub Pages always reflects the latest commit.
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # ── Job 1: Build ─────────────────────────────────────────────────────────
+  build:
+    name: Build static site
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Next.js static export
+        env:
+          # Activates `output: "export"` in next.config.ts
+          NEXT_STATIC_EXPORT: "true"
+          # Sub-directory path: https://akshaycr9.github.io/kamlesh-graphologist-claude/
+          NEXT_PUBLIC_BASE_PATH: /kamlesh-graphologist-claude
+          # Signals the form to skip the /api route (unavailable on GitHub Pages)
+          NEXT_PUBLIC_STATIC_MODE: "true"
+        run: npm run build
+
+      # GitHub Pages ignores directories that start with `_` unless a
+      # .nojekyll file is present. Next.js exports to _next/, so this is
+      # required to serve JS/CSS assets correctly.
+      - name: Add .nojekyll to prevent Jekyll processing
+        run: touch ./out/.nojekyll
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload static export as Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  # ── Job 2: Deploy ─────────────────────────────────────────────────────────
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

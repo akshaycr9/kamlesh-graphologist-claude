@@ -1,10 +1,17 @@
 "use client";
 
+// NEXT_PUBLIC_STATIC_MODE is injected at build-time by the GitHub Actions
+// workflow (NEXT_PUBLIC_STATIC_MODE=true).  When true, form submission skips
+// the /api/free-analysis route (which doesn't exist on GitHub Pages) and
+// instead shows contact details so the visitor can reach Kamlesh directly.
+// In a real server deployment this env var is absent/false and the API works.
+const STATIC_MODE = process.env.NEXT_PUBLIC_STATIC_MODE === "true";
+
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Upload, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { Upload, CheckCircle2, AlertCircle, Loader2, MessageCircle, Mail } from "lucide-react";
 
 import {
   Dialog,
@@ -119,6 +126,22 @@ export default function FreeAnalysisDialog({
 
     setSubmitState("loading");
 
+    // ── Static / GitHub Pages path ──────────────────────────────────────────
+    // No Node.js server is available; show contact details so the visitor
+    // can reach Kamlesh directly via WhatsApp or email.
+    if (STATIC_MODE) {
+      await new Promise((r) => setTimeout(r, 900)); // brief UX pause
+      setSubmitState("success");
+      setSubmitMessage(
+        `Thank you, ${data.fullName}! Your details have been noted. ` +
+          "Please send your handwriting sample to Kamlesh directly via " +
+          "WhatsApp (+91 98765 43210) or email (kamlesh@example.com) to " +
+          "complete your free analysis request.",
+      );
+      return;
+    }
+
+    // ── Server path (dev / Vercel / self-hosted) ────────────────────────────
     const formData = new FormData();
     formData.append("fullName",  data.fullName);
     formData.append("email",     data.email);
@@ -173,17 +196,40 @@ export default function FreeAnalysisDialog({
             <div className="w-14 h-14 rounded-full bg-gold/10 flex items-center justify-center">
               <CheckCircle2 className="w-7 h-7 text-gold" />
             </div>
-            <div>
-              <p className="font-display text-lg font-semibold text-ink mb-1">
+            <div className="space-y-2">
+              <p className="font-display text-lg font-semibold text-ink">
                 Request Received!
               </p>
-              <p className="text-sm text-ink-muted leading-relaxed">
+              <p className="text-sm text-ink-muted leading-relaxed max-w-sm">
                 {submitMessage}
               </p>
             </div>
+
+            {/* In static mode surface direct contact links */}
+            {STATIC_MODE && (
+              <div className="flex flex-col sm:flex-row gap-2 mt-1 w-full max-w-xs">
+                <a
+                  href="https://wa.me/919876543210"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-md border border-green-500/40 bg-green-50 px-4 py-2.5 text-sm font-medium text-green-700 hover:bg-green-100 transition-colors"
+                >
+                  <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                  WhatsApp
+                </a>
+                <a
+                  href="mailto:kamlesh@example.com"
+                  className="flex-1 inline-flex items-center justify-center gap-2 rounded-md border border-border bg-parchment-200 px-4 py-2.5 text-sm font-medium text-ink-light hover:bg-parchment-300 transition-colors"
+                >
+                  <Mail className="w-4 h-4" aria-hidden="true" />
+                  Email
+                </a>
+              </div>
+            )}
+
             <Button
               variant="outline-ink"
-              className="mt-2"
+              className="mt-1"
               onClick={() => onOpenChange(false)}
             >
               Close
