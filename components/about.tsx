@@ -39,19 +39,14 @@ export default function About() {
                 aria-hidden="true"
               />
               {/* Photo */}
-              <div className="relative rounded-xl overflow-hidden border-2 border-parchment-300 shadow-xl aspect-[4/5]">
+              <div className="relative rounded-xl overflow-hidden border-2 border-parchment-300 shadow-xl aspect-[4/5] bg-white">
                 <Image
                   src="/kamlesh-profile.png"
                   alt="Kamlesh Gidwani, Certified Graphologist"
                   fill
-                  className="object-cover object-top"
+                  className="object-contain object-center"
                   sizes="(max-width: 640px) 256px, (max-width: 768px) 288px, 320px"
                   priority
-                />
-                {/* Parchment overlay grain */}
-                <div
-                  className="absolute inset-0 bg-gradient-to-br from-parchment-100/10 via-transparent to-ink-blue/10 pointer-events-none"
-                  aria-hidden="true"
                 />
               </div>
 
