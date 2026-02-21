@@ -14,6 +14,7 @@ import WhyItMatters      from "@/components/why-it-matters";
 import Services          from "@/components/services";
 import Process           from "@/components/process";
 import Pricing           from "@/components/pricing";
+import Testimonials      from "@/components/testimonials";
 import Footer            from "@/components/footer";
 import FreeAnalysisDialog from "@/components/free-analysis-dialog";
 
@@ -45,6 +46,9 @@ export default function LandingPage() {
 
         {/* 6 · Pricing ─────────────────────────────────────────── */}
         <Pricing onOpenFreeAnalysis={openDialog} />
+
+        {/* 7 · Testimonials ────────────────────────────────────── */}
+        <Testimonials />
       </main>
 
       {/* Footer ────────────────────────────────────────────────── */}

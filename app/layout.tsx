@@ -23,7 +23,7 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-  title: "Kamlesh Patel · Certified Graphologist",
+  title: "Kamlesh Gidwani · Certified Graphologist",
   description:
     "Discover your personality, emotional patterns, and hidden potential through professional handwriting analysis. Certified graphologist with 12+ years of practice.",
   keywords: [
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     "personality assessment",
   ],
   openGraph: {
-    title: "Kamlesh Patel · Certified Graphologist",
+    title: "Kamlesh Gidwani · Certified Graphologist",
     description:
       "Professional handwriting analysis for self-discovery, relationship insights, and career alignment.",
     type: "website",

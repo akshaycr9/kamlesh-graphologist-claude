@@ -70,7 +70,7 @@ export default function Navbar({ onOpenFreeAnalysis }: NavbarProps) {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
           className="flex flex-col leading-none group"
-          aria-label="Kamlesh Patel, Graphologist — return to top"
+          aria-label="Kamlesh Gidwani, Graphologist — return to top"
         >
           <span
             className={cn(
@@ -78,7 +78,7 @@ export default function Navbar({ onOpenFreeAnalysis }: NavbarProps) {
               scrolled ? "text-ink text-lg" : "text-parchment-100 text-lg",
             )}
           >
-            Kamlesh Patel
+            Kamlesh Gidwani
           </span>
           <span
             className={cn(
@@ -137,7 +137,7 @@ export default function Navbar({ onOpenFreeAnalysis }: NavbarProps) {
             <SheetHeader>
               <SheetTitle className="text-left">
                 <span className="font-display text-xl font-bold text-ink block">
-                  Kamlesh Patel
+                  Kamlesh Gidwani
                 </span>
                 <span className="font-body text-xs tracking-widest uppercase text-gold-dark block mt-0.5">
                   Graphologist

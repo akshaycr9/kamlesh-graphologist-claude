@@ -153,7 +153,7 @@ export default function Hero({ onOpenFreeAnalysis }: HeroProps) {
           <div className="mt-12 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-8 text-parchment-300">
             <TrustPill value="12+" label="Years of Practice" />
             <TrustPill value="600+" label="Analyses Completed" />
-            <TrustPill value="AHAF" label="Certified Member" />
+            <TrustPill value="ICG" label="Certified Member" />
           </div>
         </div>
       </div>
