@@ -117,7 +117,7 @@ export default function Pricing({ onOpenFreeAnalysis }: PricingProps) {
         {/* Pricing cards */}
         <div
           ref={gridRef}
-          className="reveal-stagger grid sm:grid-cols-2 gap-6 md:gap-5"
+          className="reveal-stagger grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4"
         >
           {tiers.map((tier) => (
             <PricingCard
@@ -157,7 +157,7 @@ function PricingCard({
   return (
     <div
       className={cn(
-        "relative rounded-xl p-7 flex flex-col gap-6 transition-shadow",
+        "relative rounded-xl p-7 lg:p-5 flex flex-col gap-5 lg:gap-4 transition-shadow h-full",
         tier.recommended
           ? "bg-ink-blue border-2 border-ink-blue shadow-xl shadow-ink-blue/20"
           : "bg-parchment-100 border border-parchment-300 shadow-sm"
@@ -177,7 +177,7 @@ function PricingCard({
       <div>
         <h3
           className={cn(
-            "font-display text-xl font-semibold mb-1",
+            "font-display text-xl lg:text-lg font-semibold mb-1",
             tier.recommended ? "text-parchment-100" : "text-ink"
           )}
         >
@@ -198,7 +198,7 @@ function PricingCard({
         <div className="flex items-baseline gap-1.5">
           <span
             className={cn(
-              "font-display text-4xl font-bold",
+              "font-display text-4xl lg:text-3xl font-bold",
               tier.recommended ? "text-gold-light" : "text-ink"
             )}
           >
@@ -221,9 +221,9 @@ function PricingCard({
       <div className="gold-rule opacity-30" />
 
       {/* Includes list */}
-      <ul className="space-y-2.5 flex-1" role="list">
+      <ul className="space-y-2.5 lg:space-y-2 flex-1" role="list">
         {tier.includes.map((item) => (
-          <li key={item} className="flex items-start gap-2.5 text-sm">
+          <li key={item} className="flex items-start gap-2 text-sm lg:text-xs">
             <CheckCircle2
               className={cn(
                 "w-4 h-4 mt-0.5 shrink-0",
@@ -247,10 +247,10 @@ function PricingCard({
         onClick={onOpenFreeAnalysis}
         variant={tier.recommended ? "default" : "outline-ink"}
         className={cn(
-          "w-full mt-2",
+          "w-full mt-auto",
           tier.recommended && "shadow-md shadow-black/20"
         )}
-        size="lg"
+        size="sm"
       >
         {tier.cta}
       </Button>
