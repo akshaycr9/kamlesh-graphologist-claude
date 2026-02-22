@@ -7,35 +7,42 @@ import {
   CardTitle,
   CardDescription,
   CardContent,
-  CardFooter,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 
 interface Service {
-  title:       string;
-  description: string;
+  title:        string;
+  description:  string;
   deliverables: string[];
-  price:       string;
-  priceNote?:  string;
-  badge?:      string;
-  popular?:    boolean;
+  badge?:       string;
+  popular?:     boolean;
 }
 
 const services: Service[] = [
+  {
+    title:       "Signature Enhancement",
+    description:
+      "Transform your signature to reflect your true potential and the life you want to create. A powerful tool for building authority, presence, and personal branding.",
+    deliverables: [
+      "Signature analysis & redesign",
+      "3 custom signature options",
+      "Step-by-step writing guide",
+      "Follow-up review session",
+    ],
+    popular: true,
+    badge: "Most Popular",
+  },
   {
     title:       "Personal Handwriting Analysis",
     description:
       "A comprehensive deep-dive into your unique script, revealing personality traits, emotional responses, thinking style, and areas of hidden strength.",
     deliverables: [
-      "15-page written analysis report",
+      "Written analysis report",
       "Personality strengths & growth areas",
       "Emotional patterns & stress indicators",
-      "30-minute follow-up call",
+      "15-minute follow-up call",
     ],
-    price:    "From ₹2,999",
-    priceNote: "Delivered within 5 business days",
   },
   {
     title:       "Relationship Compatibility",
@@ -47,10 +54,6 @@ const services: Service[] = [
       "Potential friction points & strengths",
       "Practical relationship guidance",
     ],
-    price:    "From ₹4,499",
-    priceNote: "Delivered within 7 business days",
-    popular: true,
-    badge: "Most Popular",
   },
   {
     title:       "Career & Talent Mapping",
@@ -62,29 +65,32 @@ const services: Service[] = [
       "Ideal working environment profile",
       "Industry & role recommendations",
     ],
-    price:    "From ₹3,499",
-    priceNote: "Delivered within 5 business days",
   },
   {
-    title:       "Corporate Team Workshops",
+    title:       "Health Analysis",
     description:
-      "Interactive sessions revealing individual communication styles, leadership traits, and team dynamics — helping organisations build stronger, more self-aware teams.",
+      "Uncover the connection between your handwriting patterns and your wellbeing to support holistic healing and emotional resilience.",
     deliverables: [
-      "Mini-report for each participant",
-      "Team dynamics & communication overview",
-      "2-hour facilitated workshop session",
-      "Follow-up recommendations for managers",
+      "Manage stress levels effectively",
+      "Achieve anxiety reduction",
+      "Find emotional balance",
+      "Personalised wellbeing recommendations",
     ],
-    price:    "Custom Pricing",
-    priceNote: "Enquire for group rates",
+  },
+  {
+    title:       "Money Analysis",
+    description:
+      "Discover and shift the subconscious patterns in your handwriting that influence your relationship with money and abundance.",
+    deliverables: [
+      "Build confidence in all areas of life",
+      "Remove psychological blocks holding you back",
+      "Cultivate an abundance mindset",
+      "Money script & belief pattern analysis",
+    ],
   },
 ];
 
-interface ServicesProps {
-  onOpenFreeAnalysis: () => void;
-}
-
-export default function Services({ onOpenFreeAnalysis }: ServicesProps) {
+export default function Services() {
   const headingRef = useScrollReveal<HTMLDivElement>();
   const gridRef    = useScrollReveal<HTMLDivElement>();
 
@@ -120,7 +126,6 @@ export default function Services({ onOpenFreeAnalysis }: ServicesProps) {
             <ServiceCard
               key={service.title}
               service={service}
-              onOpenFreeAnalysis={onOpenFreeAnalysis}
             />
           ))}
         </div>
@@ -129,13 +134,7 @@ export default function Services({ onOpenFreeAnalysis }: ServicesProps) {
   );
 }
 
-function ServiceCard({
-  service,
-  onOpenFreeAnalysis,
-}: {
-  service: Service;
-  onOpenFreeAnalysis: () => void;
-}) {
+function ServiceCard({ service }: { service: Service }) {
   return (
     <Card
       className={[
@@ -177,18 +176,6 @@ function ServiceCard({
           ))}
         </ul>
       </CardContent>
-
-      <CardFooter className="flex items-end justify-between pt-4 border-t border-parchment-300 flex-wrap gap-3">
-        <div>
-          <p className="font-display text-xl font-bold text-ink">{service.price}</p>
-          {service.priceNote && (
-            <p className="text-xs text-ink-muted mt-0.5">{service.priceNote}</p>
-          )}
-        </div>
-        <Button size="sm" onClick={onOpenFreeAnalysis}>
-          Get Started
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

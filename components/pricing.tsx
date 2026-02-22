@@ -23,7 +23,7 @@ const tiers: PricingTier[] = [
     priceDetail: "One-time",
     forWho: "Ideal for a first-time glimpse into what graphology can reveal",
     includes: [
-      "10-page written analysis report",
+      "Written analysis report",
       "Core personality overview",
       "3 key trait deep-dives",
       "Communication style profile",
@@ -37,7 +37,7 @@ const tiers: PricingTier[] = [
     priceDetail: "One-time",
     forWho: "For those ready for a full, transformative self-portrait",
     includes: [
-      "20-page comprehensive analysis",
+      "Comprehensive analysis",
       "Full personality profile",
       "Emotional patterns & stress markers",
       "Relationship & communication style",
@@ -50,18 +50,35 @@ const tiers: PricingTier[] = [
   },
   {
     name: "Premium",
-    price: "₹8,999",
+    price: "₹9,999",
     priceDetail: "One-time",
     forWho: "For ongoing support and the deepest possible transformation",
     includes: [
       "Everything in Deep Dive",
       "Priority delivery (48 hours)",
-      "Unlimited follow-up questions (30 days)",
-      "Monthly handwriting check-in × 3 months",
+      "2 online 15 minutes call per week × 1 month",
+      "Daily handwriting check-in × 1 month",
       "Personalised growth roadmap",
       "Direct access to Kamlesh",
     ],
     cta: "Go Premium",
+  },
+  {
+    name: "Transformation Mastery",
+    price: "₹19,999",
+    priceDetail: "One-time",
+    forWho:
+      "For those committed to deep, lasting change with structured guidance over 120 days",
+    includes: [
+      "Everything in Premium",
+      "120 Days Holistic Coaching",
+      "Advanced Practice Materials",
+      "Progress Tracking Logs",
+      "Weekly accountability check-ins",
+      "Personalised transformation roadmap",
+      "Priority support throughout the journey",
+    ],
+    cta: "Begin Transformation",
   },
 ];
 
@@ -100,7 +117,7 @@ export default function Pricing({ onOpenFreeAnalysis }: PricingProps) {
         {/* Pricing cards */}
         <div
           ref={gridRef}
-          className="reveal-stagger grid md:grid-cols-3 gap-6 md:gap-5 items-start"
+          className="reveal-stagger grid sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-4"
         >
           {tiers.map((tier) => (
             <PricingCard
@@ -140,9 +157,9 @@ function PricingCard({
   return (
     <div
       className={cn(
-        "relative rounded-xl p-7 flex flex-col gap-6 transition-shadow",
+        "relative rounded-xl p-7 lg:p-5 flex flex-col gap-5 lg:gap-4 transition-shadow h-full",
         tier.recommended
-          ? "bg-ink-blue border-2 border-ink-blue shadow-xl shadow-ink-blue/20 md:-mt-3 md:-mb-3"
+          ? "bg-ink-blue border-2 border-ink-blue shadow-xl shadow-ink-blue/20"
           : "bg-parchment-100 border border-parchment-300 shadow-sm"
       )}
     >
@@ -160,7 +177,7 @@ function PricingCard({
       <div>
         <h3
           className={cn(
-            "font-display text-xl font-semibold mb-1",
+            "font-display text-xl lg:text-lg font-semibold mb-1",
             tier.recommended ? "text-parchment-100" : "text-ink"
           )}
         >
@@ -181,7 +198,7 @@ function PricingCard({
         <div className="flex items-baseline gap-1.5">
           <span
             className={cn(
-              "font-display text-4xl font-bold",
+              "font-display text-4xl lg:text-3xl font-bold",
               tier.recommended ? "text-gold-light" : "text-ink"
             )}
           >
@@ -204,9 +221,9 @@ function PricingCard({
       <div className="gold-rule opacity-30" />
 
       {/* Includes list */}
-      <ul className="space-y-2.5 flex-1" role="list">
+      <ul className="space-y-2.5 lg:space-y-2 flex-1" role="list">
         {tier.includes.map((item) => (
-          <li key={item} className="flex items-start gap-2.5 text-sm">
+          <li key={item} className="flex items-start gap-2 text-sm lg:text-xs">
             <CheckCircle2
               className={cn(
                 "w-4 h-4 mt-0.5 shrink-0",
@@ -230,10 +247,10 @@ function PricingCard({
         onClick={onOpenFreeAnalysis}
         variant={tier.recommended ? "default" : "outline-ink"}
         className={cn(
-          "w-full mt-2",
+          "w-full mt-auto",
           tier.recommended && "shadow-md shadow-black/20"
         )}
-        size="lg"
+        size="sm"
       >
         {tier.cta}
       </Button>
