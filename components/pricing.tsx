@@ -59,7 +59,7 @@ const tiers: PricingTier[] = [
       "2 online 15 minutes call per week × 1 month",
       "Daily handwriting check-in × 1 month",
       "Personalised growth roadmap",
-      "Direct WhatsApp access to Kamlesh",
+      "Direct access to Kamlesh",
     ],
     cta: "Go Premium",
   },
