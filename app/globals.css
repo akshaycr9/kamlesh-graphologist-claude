@@ -163,6 +163,9 @@
   .reveal-stagger.in-view > *:nth-child(3) { opacity: 1; transform: none; transition-delay: 200ms; }
   .reveal-stagger.in-view > *:nth-child(4) { opacity: 1; transform: none; transition-delay: 300ms; }
   .reveal-stagger.in-view > *:nth-child(5) { opacity: 1; transform: none; transition-delay: 400ms; }
+  .reveal-stagger.in-view > *:nth-child(6) { opacity: 1; transform: none; transition-delay: 500ms; }
+  .reveal-stagger.in-view > *:nth-child(7) { opacity: 1; transform: none; transition-delay: 600ms; }
+  .reveal-stagger.in-view > *:nth-child(8) { opacity: 1; transform: none; transition-delay: 700ms; }
 
   /* Honour user preference — no motion at all */
   @media (prefers-reduced-motion: reduce) {

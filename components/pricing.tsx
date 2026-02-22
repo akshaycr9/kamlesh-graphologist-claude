@@ -7,23 +7,23 @@ import { useScrollReveal } from "@/hooks/use-scroll-reveal";
 import { cn } from "@/lib/utils";
 
 interface PricingTier {
-  name:        string;
-  price:       string;
+  name: string;
+  price: string;
   priceDetail?: string;
-  forWho:      string;
-  includes:    string[];
+  forWho: string;
+  includes: string[];
   recommended?: boolean;
-  cta:         string;
+  cta: string;
 }
 
 const tiers: PricingTier[] = [
   {
-    name:        "Essential",
-    price:       "₹2,999",
+    name: "Essential",
+    price: "₹2,999",
     priceDetail: "One-time",
-    forWho:      "Ideal for a first-time glimpse into what graphology can reveal",
+    forWho: "Ideal for a first-time glimpse into what graphology can reveal",
     includes: [
-      "10-page written analysis report",
+      "Written analysis report",
       "Core personality overview",
       "3 key trait deep-dives",
       "Communication style profile",
@@ -32,12 +32,12 @@ const tiers: PricingTier[] = [
     cta: "Get Started",
   },
   {
-    name:        "Deep Dive",
-    price:       "₹4,999",
+    name: "Deep Dive",
+    price: "₹4,999",
     priceDetail: "One-time",
-    forWho:      "For those ready for a full, transformative self-portrait",
+    forWho: "For those ready for a full, transformative self-portrait",
     includes: [
-      "20-page comprehensive analysis",
+      "Comprehensive analysis",
       "Full personality profile",
       "Emotional patterns & stress markers",
       "Relationship & communication style",
@@ -49,19 +49,36 @@ const tiers: PricingTier[] = [
     cta: "Get Deep Dive",
   },
   {
-    name:        "Premium",
-    price:       "₹8,999",
+    name: "Premium",
+    price: "₹9,999",
     priceDetail: "One-time",
-    forWho:      "For ongoing support and the deepest possible transformation",
+    forWho: "For ongoing support and the deepest possible transformation",
     includes: [
       "Everything in Deep Dive",
       "Priority delivery (48 hours)",
-      "Unlimited follow-up questions (30 days)",
-      "Monthly handwriting check-in × 3 months",
+      "2 online 15 minutes call per week × 1 month",
+      "Daily handwriting check-in × 1 month",
       "Personalised growth roadmap",
       "Direct WhatsApp access to Kamlesh",
     ],
     cta: "Go Premium",
+  },
+  {
+    name: "Transformation Mastery",
+    price: "₹19,999",
+    priceDetail: "One-time",
+    forWho:
+      "For those committed to deep, lasting change with structured guidance over 120 days",
+    includes: [
+      "Everything in Premium",
+      "120 Days Holistic Coaching",
+      "Advanced Practice Materials",
+      "Progress Tracking Logs",
+      "Weekly accountability check-ins",
+      "Personalised transformation roadmap",
+      "Priority support throughout the journey",
+    ],
+    cta: "Begin Transformation",
   },
 ];
 
@@ -71,8 +88,8 @@ interface PricingProps {
 
 export default function Pricing({ onOpenFreeAnalysis }: PricingProps) {
   const headingRef = useScrollReveal<HTMLDivElement>();
-  const gridRef    = useScrollReveal<HTMLDivElement>();
-  const noteRef    = useScrollReveal<HTMLParagraphElement>();
+  const gridRef = useScrollReveal<HTMLDivElement>();
+  const noteRef = useScrollReveal<HTMLParagraphElement>();
 
   return (
     <section
@@ -100,7 +117,7 @@ export default function Pricing({ onOpenFreeAnalysis }: PricingProps) {
         {/* Pricing cards */}
         <div
           ref={gridRef}
-          className="reveal-stagger grid md:grid-cols-3 gap-6 md:gap-5 items-start"
+          className="reveal-stagger grid sm:grid-cols-2 gap-6 md:gap-5"
         >
           {tiers.map((tier) => (
             <PricingCard
@@ -142,8 +159,8 @@ function PricingCard({
       className={cn(
         "relative rounded-xl p-7 flex flex-col gap-6 transition-shadow",
         tier.recommended
-          ? "bg-ink-blue border-2 border-ink-blue shadow-xl shadow-ink-blue/20 md:-mt-3 md:-mb-3"
-          : "bg-parchment-100 border border-parchment-300 shadow-sm",
+          ? "bg-ink-blue border-2 border-ink-blue shadow-xl shadow-ink-blue/20"
+          : "bg-parchment-100 border border-parchment-300 shadow-sm"
       )}
     >
       {/* Recommended badge */}
@@ -161,7 +178,7 @@ function PricingCard({
         <h3
           className={cn(
             "font-display text-xl font-semibold mb-1",
-            tier.recommended ? "text-parchment-100" : "text-ink",
+            tier.recommended ? "text-parchment-100" : "text-ink"
           )}
         >
           {tier.name}
@@ -169,7 +186,7 @@ function PricingCard({
         <p
           className={cn(
             "font-body text-xs leading-relaxed",
-            tier.recommended ? "text-parchment-300" : "text-ink-muted",
+            tier.recommended ? "text-parchment-300" : "text-ink-muted"
           )}
         >
           {tier.forWho}
@@ -182,7 +199,7 @@ function PricingCard({
           <span
             className={cn(
               "font-display text-4xl font-bold",
-              tier.recommended ? "text-gold-light" : "text-ink",
+              tier.recommended ? "text-gold-light" : "text-ink"
             )}
           >
             {tier.price}
@@ -192,7 +209,7 @@ function PricingCard({
           <p
             className={cn(
               "text-xs mt-0.5",
-              tier.recommended ? "text-parchment-300" : "text-ink-muted",
+              tier.recommended ? "text-parchment-300" : "text-ink-muted"
             )}
           >
             {tier.priceDetail}
@@ -210,12 +227,14 @@ function PricingCard({
             <CheckCircle2
               className={cn(
                 "w-4 h-4 mt-0.5 shrink-0",
-                tier.recommended ? "text-gold" : "text-gold-dark",
+                tier.recommended ? "text-gold" : "text-gold-dark"
               )}
               aria-hidden="true"
             />
             <span
-              className={tier.recommended ? "text-parchment-200" : "text-ink-light"}
+              className={
+                tier.recommended ? "text-parchment-200" : "text-ink-light"
+              }
             >
               {item}
             </span>
@@ -229,7 +248,7 @@ function PricingCard({
         variant={tier.recommended ? "default" : "outline-ink"}
         className={cn(
           "w-full mt-2",
-          tier.recommended && "shadow-md shadow-black/20",
+          tier.recommended && "shadow-md shadow-black/20"
         )}
         size="lg"
       >

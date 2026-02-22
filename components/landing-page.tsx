@@ -2,8 +2,8 @@
 
 // LandingPage — the top-level client component that:
 //   1. Manages the global "Free Analysis" dialog open/close state.
-//   2. Passes onOpenFreeAnalysis callbacks to Navbar, Hero, Services,
-//      and Pricing so any of them can trigger the same dialog.
+//   2. Passes onOpenFreeAnalysis callbacks to Navbar, Hero, and Pricing
+//      so any of them can trigger the same dialog.
 //   3. Assembles all sections in document order.
 
 import React from "react";
@@ -39,7 +39,7 @@ export default function LandingPage() {
         <WhyItMatters />
 
         {/* 4 · Services ────────────────────────────────────────── */}
-        <Services onOpenFreeAnalysis={openDialog} />
+        <Services />
 
         {/* 5 · Process ─────────────────────────────────────────── */}
         <Process />
