@@ -11,7 +11,14 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Upload, CheckCircle2, AlertCircle, Loader2, MessageCircle, Mail } from "lucide-react";
+import {
+  Upload,
+  CheckCircle2,
+  AlertCircle,
+  Loader2,
+  MessageCircle,
+  Mail,
+} from "lucide-react";
 
 import {
   Dialog,
@@ -31,7 +38,15 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+
+// ── Goal options ─────────────────────────────────────────────────────────────
+const GOAL_OPTIONS = [
+  "Signature Enhancement",
+  "Health",
+  "Relationships",
+  "Career",
+  "Money",
+] as const;
 
 // ── Validation schema ────────────────────────────────────────────────────────
 const formSchema = z.object({
@@ -40,14 +55,11 @@ const formSchema = z.object({
     .min(2, "Name must be at least 2 characters")
     .max(80, "Name is too long"),
   email: z.string().email("Please enter a valid email address"),
-  whatsapp: z
+  phone: z
     .string()
-    .min(7, "Enter a valid WhatsApp number with country code")
+    .min(7, "Enter a valid phone number with country code")
     .max(20, "Number is too long"),
-  goals: z
-    .string()
-    .min(20, "Please describe your goals in at least 20 characters")
-    .max(1000, "Please keep your description under 1000 characters"),
+  goals: z.array(z.string()).min(1, "Please select at least one area of focus"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -75,8 +87,8 @@ export default function FreeAnalysisDialog({
     defaultValues: {
       fullName: "",
       email: "",
-      whatsapp: "",
-      goals: "",
+      phone: "",
+      goals: [],
     },
   });
 
@@ -107,8 +119,17 @@ export default function FreeAnalysisDialog({
       setFileError("File must be smaller than 10 MB.");
       return;
     }
-    const allowed = ["image/jpeg", "image/png", "image/webp", "image/heic", "application/pdf"];
-    if (!allowed.includes(file.type) && !file.name.match(/\.(jpg|jpeg|png|webp|heic|pdf)$/i)) {
+    const allowed = [
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/heic",
+      "application/pdf",
+    ];
+    if (
+      !allowed.includes(file.type) &&
+      !file.name.match(/\.(jpg|jpeg|png|webp|heic|pdf)$/i)
+    ) {
       setSelectedFile(null);
       setFileError("Please upload a JPG, PNG, WEBP, HEIC, or PDF file.");
       return;
@@ -135,19 +156,19 @@ export default function FreeAnalysisDialog({
       setSubmitMessage(
         `Thank you, ${data.fullName}! Your details have been noted. ` +
           "Please send your handwriting sample to Kamlesh directly via " +
-          "WhatsApp (+91 98765 43210) or email (kamlesh@example.com) to " +
-          "complete your free analysis request.",
+          "email (kamlesh@example.com) to " +
+          "complete your free analysis request."
       );
       return;
     }
 
     // ── Server path (dev / Vercel / self-hosted) ────────────────────────────
     const formData = new FormData();
-    formData.append("fullName",  data.fullName);
-    formData.append("email",     data.email);
-    formData.append("whatsapp",  data.whatsapp);
-    formData.append("goals",     data.goals);
-    formData.append("sample",    selectedFile);
+    formData.append("fullName", data.fullName);
+    formData.append("email", data.email);
+    formData.append("phone", data.phone);
+    formData.append("goals", data.goals.join(", "));
+    formData.append("sample", selectedFile);
 
     try {
       const res = await fetch("/api/free-analysis", {
@@ -159,12 +180,12 @@ export default function FreeAnalysisDialog({
       if (res.ok && json.success) {
         setSubmitState("success");
         setSubmitMessage(
-          json.message ?? "Thank you! Kamlesh will be in touch within 24 hours.",
+          json.message ?? "Thank you! Kamlesh will be in touch within 24 hours."
         );
       } else {
         setSubmitState("error");
         setSubmitMessage(
-          json.message ?? "Something went wrong. Please try again.",
+          json.message ?? "Something went wrong. Please try again."
         );
       }
     } catch {
@@ -182,8 +203,8 @@ export default function FreeAnalysisDialog({
           <DialogTitle>Get Your Free Handwriting Analysis</DialogTitle>
           <DialogDescription>
             Share your sample and goals below. Kamlesh will review your writing
-            and send you a personalised initial insight within 24 hours — no
-            obligation, no strings.
+            and send you a personalised initial insight — no obligation, no
+            strings.
           </DialogDescription>
         </DialogHeader>
 
@@ -208,7 +229,7 @@ export default function FreeAnalysisDialog({
             {/* In static mode surface direct contact links */}
             {STATIC_MODE && (
               <div className="flex flex-col sm:flex-row gap-2 mt-1 w-full max-w-xs">
-                <a
+                {/* <a
                   href="https://wa.me/919876543210"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -216,7 +237,7 @@ export default function FreeAnalysisDialog({
                 >
                   <MessageCircle className="w-4 h-4" aria-hidden="true" />
                   WhatsApp
-                </a>
+                </a> */}
                 <a
                   href="mailto:kamlesh@example.com"
                   className="flex-1 inline-flex items-center justify-center gap-2 rounded-md border border-border bg-parchment-200 px-4 py-2.5 text-sm font-medium text-ink-light hover:bg-parchment-300 transition-colors"
@@ -279,10 +300,10 @@ export default function FreeAnalysisDialog({
               {/* WhatsApp */}
               <FormField
                 control={form.control}
-                name="whatsapp"
+                name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>WhatsApp Number</FormLabel>
+                    <FormLabel>Phone Number</FormLabel>
                     <FormControl>
                       <Input
                         type="tel"
@@ -298,19 +319,47 @@ export default function FreeAnalysisDialog({
                 )}
               />
 
-              {/* Goals */}
+              {/* Goals — multi-select chips */}
               <FormField
                 control={form.control}
                 name="goals"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>What do you want to achieve?</FormLabel>
+                    <FormDescription className="text-xs text-ink-muted -mt-0.5">
+                      Select all that apply — you can choose more than one.
+                    </FormDescription>
                     <FormControl>
-                      <Textarea
-                        placeholder="E.g. I'd like to understand my communication style, discover strengths I might be overlooking, and get clarity on a career decision I've been facing…"
-                        className="min-h-[110px]"
-                        {...field}
-                      />
+                      <div
+                        className="flex flex-wrap gap-2 pt-1"
+                        role="group"
+                        aria-label="Areas of focus"
+                      >
+                        {GOAL_OPTIONS.map((option) => {
+                          const isSelected = field.value.includes(option);
+                          return (
+                            <button
+                              key={option}
+                              type="button"
+                              onClick={() => {
+                                const next = isSelected
+                                  ? field.value.filter((v) => v !== option)
+                                  : [...field.value, option];
+                                field.onChange(next);
+                              }}
+                              aria-pressed={isSelected}
+                              className={[
+                                "px-4 py-1.5 rounded-full border text-sm font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-1",
+                                isSelected
+                                  ? "bg-gold/15 border-gold text-gold-dark shadow-sm"
+                                  : "bg-transparent border-border text-ink-muted hover:border-gold/50 hover:text-ink",
+                              ].join(" ")}
+                            >
+                              {option}
+                            </button>
+                          );
+                        })}
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -332,8 +381,8 @@ export default function FreeAnalysisDialog({
                     fileError
                       ? "border-destructive/60"
                       : selectedFile
-                        ? "border-gold/50 bg-gold/5"
-                        : "border-border",
+                      ? "border-gold/50 bg-gold/5"
+                      : "border-border",
                   ].join(" ")}
                   onClick={() => fileInputRef.current?.click()}
                   onKeyDown={(e) => {
@@ -375,14 +424,17 @@ export default function FreeAnalysisDialog({
                   )}
                 </div>
                 {fileError && (
-                  <p id="sample-error" className="text-xs text-destructive font-medium flex items-center gap-1 mt-1">
+                  <p
+                    id="sample-error"
+                    className="text-xs text-destructive font-medium flex items-center gap-1 mt-1"
+                  >
                     <AlertCircle className="w-3 h-3 shrink-0" />
                     {fileError}
                   </p>
                 )}
                 <p className="text-xs text-muted-foreground">
-                  Write 3–5 sentences in your natural handwriting on unlined paper,
-                  then photograph or scan it.
+                  Write sample as per passage provided on an unlined A4 size
+                  sheet.
                 </p>
               </div>
 

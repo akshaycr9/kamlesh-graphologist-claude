@@ -7,23 +7,23 @@ import { NextRequest, NextResponse } from "next/server";
 //   2. Upload the handwriting-sample file to object storage (S3 / Cloudinary).
 //   3. Persist lead data in your database (PostgreSQL, Supabase, etc.).
 //   4. Send a confirmation email to the user (Resend / SendGrid).
-//   5. Notify Kamlesh via email / WhatsApp / CRM.
+//   5. Notify Kamlesh via email / Phone / CRM.
 
 export async function POST(req: NextRequest) {
   try {
     const data = await req.formData();
 
     const fullName = data.get("fullName") as string | null;
-    const email    = data.get("email")    as string | null;
-    const whatsapp = data.get("whatsapp") as string | null;
-    const goals    = data.get("goals")    as string | null;
-    const sample   = data.get("sample")   as File   | null;
+    const email = data.get("email") as string | null;
+    const phone = data.get("phone") as string | null;
+    const goals = data.get("goals") as string | null;
+    const sample = data.get("sample") as File | null;
 
     // Basic server-side guard — the client also validates these.
     if (!fullName || !email || !goals) {
       return NextResponse.json(
         { success: false, message: "Missing required fields." },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     console.log("[free-analysis] New submission:", {
       fullName,
       email,
-      whatsapp,
+      phone,
       goals,
       sampleName: sample?.name ?? null,
       sampleSize: sample?.size ?? null,
@@ -46,7 +46,7 @@ export async function POST(req: NextRequest) {
     console.error("[free-analysis] Error:", err);
     return NextResponse.json(
       { success: false, message: "Something went wrong. Please try again." },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }
